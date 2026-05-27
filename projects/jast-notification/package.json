@@ -1,0 +1,32 @@
+{
+  "name": "jast-notification",
+  "version": "0.0.1",
+  "description": "Angular toast notification library built on top of Angular CDK Overlay",
+  "keywords": [
+    "angular",
+    "notification",
+    "toast",
+    "overlay",
+    "cdk",
+    "alert"
+  ],
+  "author": "javier00be",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/javier00be/jast.git"
+  },
+  "homepage": "https://github.com/javier00be/jast#readme",
+  "bugs": {
+    "url": "https://github.com/javier00be/jast/issues"
+  },
+  "peerDependencies": {
+    "@angular/cdk": "^21.2.0",
+    "@angular/common": "^21.2.0",
+    "@angular/core": "^21.2.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false
+}

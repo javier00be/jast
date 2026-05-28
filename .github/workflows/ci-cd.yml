@@ -1,0 +1,101 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, master ]
+    tags:
+      - 'v*'
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  ci:
+    name: Continuous Integration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check formatting (Prettier)
+        run: npx prettier --check .
+
+      - name: Build Library (jast-notification)
+        run: npx ng build jast-notification
+
+      - name: Run Library Tests (with 80% Coverage)
+        run: npx ng test jast-notification --configuration=ci --watch=false
+
+      - name: Run Playground Tests
+        run: npx ng test playground --watch=false
+
+      - name: Build Playground App
+        run: npx ng build playground
+
+  deploy-playground:
+    name: Deploy Playground to GitHub Pages
+    needs: ci
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Library
+        run: npx ng build jast-notification
+
+      - name: Build Playground with base-href
+        # Como tu repo se llama "jast", usamos /jast/ para que funcione en GitHub Pages
+        run: npx ng build playground --base-href /jast/
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dist/playground/browser
+          branch: gh-pages
+
+  publish-npm:
+    name: Publish Library to npm
+    needs: ci
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Library
+        run: npx ng build jast-notification
+
+      - name: Publish to npm
+        run: npm publish dist/jast-notification --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -28,6 +28,17 @@
           "builder": "@angular/build:unit-test",
           "options": {
             "tsConfig": "projects/jast-notification/tsconfig.spec.json"
+          },
+          "configurations": {
+            "ci": {
+              "coverage": true,
+              "coverageThresholds": {
+                "statements": 80,
+                "branches": 80,
+                "functions": 80,
+                "lines": 80
+              }
+            }
           }
         }
       }

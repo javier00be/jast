@@ -348,20 +348,7 @@ import { Component } from '@angular/core';
       margin-bottom: 14px;
     }
 
-    /* Code block */
-    .code-block {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 20px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      color: var(--text);
-      overflow-x: auto;
-      margin: 14px 0;
-      pre { margin: 0; white-space: pre; }
-      code { background: none; padding: 0; border-radius: 0; font-size: inherit; line-height: 1.75; }
-    }
+
   `]
 })
 export class ApiRefComponent {

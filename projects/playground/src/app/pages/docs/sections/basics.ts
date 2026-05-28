@@ -43,15 +43,66 @@ import { Component } from '@angular/core';
       </div>
 
       <h2>Instalación</h2>
-      <p>Instalá el paquete vía npm:</p>
-      <div class="code-block inline-cmd">
-        <span class="prompt">$</span>
-        <code>npm install jast-notification</code>
+      <p>Instalá el paquete principal de la biblioteca vía npm:</p>
+      
+      <div class="code-editor">
+        <div class="editor-header">
+          <div class="window-buttons">
+            <span class="dot close"></span>
+            <span class="dot minimize"></span>
+            <span class="dot expand"></span>
+          </div>
+          <span class="editor-title">bash — install jast-notification</span>
+        </div>
+        <div class="editor-body">
+          <button class="copy-btn" [class.copied]="copiedJast" (click)="copyCommand('npm install jast-notification', 'jast')">
+            @if (copiedJast) {
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>¡Copiado!</span>
+            } @else {
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span>Copiar</span>
+            }
+          </button>
+          <div class="editor-lines">
+            <div class="editor-line">
+              <span class="prompt">~</span>
+              <span class="prompt cmd-sign">$</span>
+              <span class="command">npm install jast-notification</span>
+            </div>
+          </div>
+        </div>
       </div>
-      <p>Si todavía no tenés <code>@angular/cdk</code> en tu proyecto, instalalo también:</p>
-      <div class="code-block inline-cmd">
-        <span class="prompt">$</span>
-        <code>npm install @angular/cdk</code>
+
+      <p>Si todavía no tenés <code>&#64;angular/cdk</code> en tu proyecto, es necesario instalarlo como dependencia de pares (peer dependency):</p>
+      
+      <div class="code-editor">
+        <div class="editor-header">
+          <div class="window-buttons">
+            <span class="dot close"></span>
+            <span class="dot minimize"></span>
+            <span class="dot expand"></span>
+          </div>
+          <span class="editor-title">bash — install angular-cdk</span>
+        </div>
+        <div class="editor-body">
+          <button class="copy-btn" [class.copied]="copiedCdk" (click)="copyCommand('npm install @angular/cdk', 'cdk')">
+            @if (copiedCdk) {
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>¡Copiado!</span>
+            } @else {
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span>Copiar</span>
+            }
+          </button>
+          <div class="editor-lines">
+            <div class="editor-line">
+              <span class="prompt">~</span>
+              <span class="prompt cmd-sign">$</span>
+              <span class="command">npm install &#64;angular/cdk</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       <h2>Tu primer toast</h2>
@@ -135,32 +186,6 @@ import { Component } from '@angular/core';
       code { color: var(--accent); }
       span { color: var(--text-secondary); }
     }
-    .code-block {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 20px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      color: var(--text);
-      overflow-x: auto;
-      margin: 14px 0;
-      pre { margin: 0; white-space: pre; }
-      code {
-        background: none;
-        padding: 0;
-        border-radius: 0;
-        font-size: inherit;
-        line-height: 1.75;
-      }
-    }
-    .inline-cmd {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 14px 20px;
-      .prompt { color: var(--text-secondary); }
-    }
     .note {
       background: rgba(59, 130, 246, 0.05);
       border: 1px solid rgba(59, 130, 246, 0.15);
@@ -170,9 +195,24 @@ import { Component } from '@angular/core';
       color: var(--text-secondary);
       strong { color: var(--text); }
     }
+
   `]
 })
 export class BasicsComponent {
+  copiedJast = false;
+  copiedCdk = false;
+
+  copyCommand(text: string, type: 'jast' | 'cdk') {
+    navigator.clipboard.writeText(text);
+    if (type === 'jast') {
+      this.copiedJast = true;
+      setTimeout(() => this.copiedJast = false, 2000);
+    } else {
+      this.copiedCdk = true;
+      setTimeout(() => this.copiedCdk = false, 2000);
+    }
+  }
+
   firstToastCode = `import { Component, inject } from '@angular/core';
 import { JastNotificationService } from 'jast-notification';
 

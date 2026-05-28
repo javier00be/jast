@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
     <section id="install">
       <div class="inner">
         <div class="section-label">Instalación</div>
-        <h2>En marcha<br />en minutos.</h2>
+        <h2>En marcha en minutos.</h2>
 
         <div class="steps">
 
@@ -16,8 +16,7 @@ import { Component } from '@angular/core';
             <div class="step-body">
               <h3>Instalá</h3>
               <div class="code-block">
-                <span class="prompt">$</span>
-                <code>npm install jast-notification</code>
+                <pre><code><span class="prompt">$</span> npm install jast-notification</code></pre>
               </div>
             </div>
           </div>
@@ -87,24 +86,6 @@ import { Component } from '@angular/core';
       h3 {
         font-size: 15px;
         font-weight: 600;
-      }
-    }
-    .code-block {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 16px 20px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-family: 'JetBrains Mono', 'Fira Code', monospace;
-      font-size: 13px;
-      color: var(--text);
-      .prompt { color: var(--text-secondary); }
-      &.multiline {
-        align-items: flex-start;
-        pre { margin: 0; white-space: pre; }
-        code { line-height: 1.75; }
       }
     }
   `]

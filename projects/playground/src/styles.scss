@@ -32,3 +32,170 @@ body {
 ::selection {
   background: rgba(59, 130, 246, 0.25);
 }
+
+/* --- Estilos Globales para Editores y Bloques de Código --- */
+
+/* Contenedor del Editor de Comandos (Terminal) */
+.code-editor {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 18px 0 28px;
+  font-family: 'JetBrains Mono', monospace;
+  position: relative;
+}
+
+.editor-header {
+  background: var(--surface-2);
+  height: 42px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+
+.window-buttons {
+  display: flex;
+  gap: 7px;
+}
+
+.window-buttons .dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.window-buttons .close { background: #ff5f56; }
+.window-buttons .minimize { background: #ffbd2e; }
+.window-buttons .expand { background: #27c93f; }
+
+.editor-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.editor-body {
+  padding: 22px 24px;
+  position: relative;
+}
+
+.editor-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.editor-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--text);
+}
+
+.editor-line .prompt {
+  color: var(--text-secondary);
+  user-select: none;
+}
+
+.editor-line .cmd-sign {
+  color: var(--accent);
+  font-weight: bold;
+}
+
+.editor-line .command {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 16px;
+  right: 18px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: inherit;
+  
+  &:hover {
+    background: var(--border);
+    color: var(--text);
+  }
+  
+  &.copied {
+    background: rgba(39, 201, 63, 0.1);
+    border-color: rgba(39, 201, 63, 0.3);
+    color: #27c93f;
+  }
+  
+  svg { flex-shrink: 0; }
+}
+
+/* Editores de Código Standard (Cajas de Código con estilo macOS sin sombras) */
+.code-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 54px 20px 20px; /* Padding superior alto para que quepa la cabecera */
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: var(--text);
+  overflow-x: auto;
+  margin: 18px 0 28px;
+  position: relative;
+
+  pre {
+    margin: 0;
+    white-space: pre;
+  }
+
+  code {
+    background: none;
+    padding: 0;
+    border-radius: 0;
+    font-size: inherit;
+    line-height: 1.75;
+  }
+
+  /* Cabecera del Editor macOS simulada con pseudo-elementos */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 38px;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--border);
+    border-top-left-radius: 11px;
+    border-top-right-radius: 11px;
+  }
+
+  /* Tres botones clásicos de Mac creados con una sola sombra múltiple (Cero DOM extra) */
+  &::after {
+    content: '';
+    position: absolute;
+    top: 14px;
+    left: 16px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ff5f56;
+    box-shadow: 16px 0 0 #ffbd2e, 32px 0 0 #27c93f;
+  }
+}

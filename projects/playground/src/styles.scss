@@ -1,6 +1,8 @@
 @import '@angular/cdk/overlay-prebuilt.css';
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -24,7 +26,11 @@ html {
 body {
   background-color: var(--bg);
   color: var(--text);
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family:
+    'Inter',
+    system-ui,
+    -apple-system,
+    sans-serif;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
@@ -68,9 +74,15 @@ body {
   display: inline-block;
 }
 
-.window-buttons .close { background: #ff5f56; }
-.window-buttons .minimize { background: #ffbd2e; }
-.window-buttons .expand { background: #27c93f; }
+.window-buttons .close {
+  background: #ff5f56;
+}
+.window-buttons .minimize {
+  background: #ffbd2e;
+}
+.window-buttons .expand {
+  background: #27c93f;
+}
 
 .editor-title {
   position: absolute;
@@ -131,19 +143,21 @@ body {
   align-items: center;
   gap: 6px;
   font-family: inherit;
-  
+
   &:hover {
     background: var(--border);
     color: var(--text);
   }
-  
+
   &.copied {
     background: rgba(39, 201, 63, 0.1);
     border-color: rgba(39, 201, 63, 0.3);
     color: #27c93f;
   }
-  
-  svg { flex-shrink: 0; }
+
+  svg {
+    flex-shrink: 0;
+  }
 }
 
 /* Editores de Código Standard (Cajas de Código con estilo macOS sin sombras) */
@@ -196,6 +210,8 @@ body {
     height: 10px;
     border-radius: 50%;
     background: #ff5f56;
-    box-shadow: 16px 0 0 #ffbd2e, 32px 0 0 #27c93f;
+    box-shadow:
+      16px 0 0 #ffbd2e,
+      32px 0 0 #27c93f;
   }
 }

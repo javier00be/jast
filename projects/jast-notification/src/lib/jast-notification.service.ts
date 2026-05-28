@@ -16,7 +16,7 @@ interface PositionEntry {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class JastNotificationService {
   private overlay = inject(Overlay);
@@ -30,13 +30,20 @@ export class JastNotificationService {
     const offset = '24px';
 
     switch (position) {
-      case 'top-left':      return strategy.top(offset).left(offset);
-      case 'top-right':     return strategy.top(offset).right(offset);
-      case 'bottom-left':   return strategy.bottom(offset).left(offset);
-      case 'bottom-right':  return strategy.bottom(offset).right(offset);
-      case 'top-center':    return strategy.top(offset).centerHorizontally();
-      case 'bottom-center': return strategy.bottom(offset).centerHorizontally();
-      default:              return strategy.top(offset).right(offset);
+      case 'top-left':
+        return strategy.top(offset).left(offset);
+      case 'top-right':
+        return strategy.top(offset).right(offset);
+      case 'bottom-left':
+        return strategy.bottom(offset).left(offset);
+      case 'bottom-right':
+        return strategy.bottom(offset).right(offset);
+      case 'top-center':
+        return strategy.top(offset).centerHorizontally();
+      case 'bottom-center':
+        return strategy.bottom(offset).centerHorizontally();
+      default:
+        return strategy.top(offset).right(offset);
     }
   }
 
@@ -47,7 +54,7 @@ export class JastNotificationService {
 
     if (!entry) {
       const overlayRef = this.overlay.create({
-        positionStrategy: this.getPositionStrategy(position)
+        positionStrategy: this.getPositionStrategy(position),
       });
       const containerRef = overlayRef.attach(new ComponentPortal(JastToastContainerComponent));
       entry = { overlayRef, containerRef };
@@ -57,10 +64,14 @@ export class JastNotificationService {
     const toastId = `jast-${this.nextToastId++}`;
     const capturedEntry = entry;
 
-    const { id: internalId, result } = capturedEntry.containerRef.instance.add(config, this.maxToasts, () => {
-      capturedEntry.overlayRef.dispose();
-      this.positions.delete(position);
-    });
+    const { id: internalId, result } = capturedEntry.containerRef.instance.add(
+      config,
+      this.maxToasts,
+      () => {
+        capturedEntry.overlayRef.dispose();
+        this.positions.delete(position);
+      },
+    );
 
     const ref = new JastToastRef(result, toastId, () => {
       capturedEntry.containerRef.instance.dismiss(internalId);
@@ -77,12 +88,11 @@ export class JastNotificationService {
   }
 
   dismissAll(): void {
-    this.registry.forEach(ref => ref.dismiss());
+    this.registry.forEach((ref) => ref.dismiss());
   }
 
   async promise<T>(p: Promise<T>, config: JastToastPromiseConfig): Promise<T> {
-    const toMessages = (m: JastToastPromiseMessages) =>
-      typeof m === 'string' ? { title: m } : m;
+    const toMessages = (m: JastToastPromiseMessages) => (typeof m === 'string' ? { title: m } : m);
 
     const ref = this.show({
       ...toMessages(config.loading),

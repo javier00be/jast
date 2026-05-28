@@ -18,18 +18,31 @@ interface ToastEntry {
       <jast-toast
         [config]="toast.config"
         [hide]="toast.hiding"
-        (actionClicked)="onActionClicked(toast.id, $event)" />
+        (actionClicked)="onActionClicked(toast.id, $event)"
+      />
     }
   `,
-  styles: [`:host { display: flex; flex-direction: column; gap: 8px; }`]
+  styles: [
+    `
+      :host {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+    `,
+  ],
 })
 export class JastToastContainerComponent {
   toasts: ToastEntry[] = [];
   private nextId = 0;
   private cdr = inject(ChangeDetectorRef);
 
-  add(config: JastToastConfig, maxToasts: number, onEmpty: () => void): { id: number; result: Promise<string | null> } {
-    const visible = this.toasts.filter(t => !t.hiding);
+  add(
+    config: JastToastConfig,
+    maxToasts: number,
+    onEmpty: () => void,
+  ): { id: number; result: Promise<string | null> } {
+    const visible = this.toasts.filter((t) => !t.hiding);
     if (visible.length >= maxToasts) {
       visible[0].triggerHide(null);
     }
@@ -37,12 +50,12 @@ export class JastToastContainerComponent {
     const id = this.nextId++;
     const result = new Promise<string | null>((resolve) => {
       const triggerHide = (action: string | null) => {
-        const entry = this.toasts.find(t => t.id === id);
+        const entry = this.toasts.find((t) => t.id === id);
         if (!entry || entry.hiding) return;
         entry.hiding = true;
         this.cdr.detectChanges();
         setTimeout(() => {
-          this.toasts = this.toasts.filter(t => t.id !== id);
+          this.toasts = this.toasts.filter((t) => t.id !== id);
           this.cdr.detectChanges();
           if (this.toasts.length === 0) onEmpty();
           resolve(action);
@@ -56,12 +69,12 @@ export class JastToastContainerComponent {
   }
 
   dismiss(id: number): void {
-    const entry = this.toasts.find(t => t.id === id);
+    const entry = this.toasts.find((t) => t.id === id);
     entry?.triggerHide(null);
   }
 
   onActionClicked(id: number, role: string | null): void {
-    const entry = this.toasts.find(t => t.id === id);
+    const entry = this.toasts.find((t) => t.id === id);
     entry?.triggerHide(role);
   }
 }

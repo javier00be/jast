@@ -9,7 +9,7 @@ describe('JastNotificationService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [OverlayModule],
-      providers: [JastNotificationService]
+      providers: [JastNotificationService],
     });
     service = TestBed.inject(JastNotificationService);
   });
@@ -22,7 +22,7 @@ describe('JastNotificationService', () => {
     const ref = service.show({ title: 'Test Toast', position: 'top-right' });
     expect(ref).toBeTruthy();
     expect(ref.id).toContain('jast-');
-    
+
     // Cleanup
     service.dismissAll();
   });
@@ -30,7 +30,9 @@ describe('JastNotificationService', () => {
   it('should support short-hand success method', () => {
     const spy = vi.spyOn(service, 'show');
     service.success({ title: 'Success' });
-    expect(spy).toHaveBeenCalledWith(expect.objectContaining({ type: 'success', title: 'Success' }));
+    expect(spy).toHaveBeenCalledWith(
+      expect.objectContaining({ type: 'success', title: 'Success' }),
+    );
   });
 
   it('should support short-hand error method', () => {
@@ -42,7 +44,9 @@ describe('JastNotificationService', () => {
   it('should support short-hand warning method', () => {
     const spy = vi.spyOn(service, 'show');
     service.warning({ title: 'Warning' });
-    expect(spy).toHaveBeenCalledWith(expect.objectContaining({ type: 'warning', title: 'Warning' }));
+    expect(spy).toHaveBeenCalledWith(
+      expect.objectContaining({ type: 'warning', title: 'Warning' }),
+    );
   });
 
   it('should support short-hand info method', () => {
@@ -54,37 +58,49 @@ describe('JastNotificationService', () => {
   it('should support confirm dialog configuration', () => {
     const spy = vi.spyOn(service, 'show');
     service.confirm({ title: 'Confirm' });
-    expect(spy).toHaveBeenCalledWith(expect.objectContaining({ type: 'warning', title: 'Confirm', persistent: true }));
+    expect(spy).toHaveBeenCalledWith(
+      expect.objectContaining({ type: 'warning', title: 'Confirm', persistent: true }),
+    );
   });
 
   it('should handle promise resolution in promise() method', async () => {
     const fakePromise = Promise.resolve('data');
     const showSpy = vi.spyOn(service, 'show');
-    
+
     const result = await service.promise(fakePromise, {
       loading: 'Cargando',
       success: 'Completado',
       error: 'Falló',
-      position: 'top-right'
+      position: 'top-right',
     });
 
     expect(result).toBe('data');
-    expect(showSpy).toHaveBeenCalledWith(expect.objectContaining({ type: 'info', title: 'Cargando' }));
-    expect(showSpy).toHaveBeenCalledWith(expect.objectContaining({ type: 'success', title: 'Completado' }));
+    expect(showSpy).toHaveBeenCalledWith(
+      expect.objectContaining({ type: 'info', title: 'Cargando' }),
+    );
+    expect(showSpy).toHaveBeenCalledWith(
+      expect.objectContaining({ type: 'success', title: 'Completado' }),
+    );
   });
 
   it('should handle promise rejection in promise() method', async () => {
     const fakePromise = Promise.reject(new Error('fail-error'));
     const showSpy = vi.spyOn(service, 'show');
-    
-    await expect(service.promise(fakePromise, {
-      loading: 'Cargando',
-      success: 'Completado',
-      error: 'Falló',
-      position: 'top-right'
-    })).rejects.toThrow('fail-error');
 
-    expect(showSpy).toHaveBeenCalledWith(expect.objectContaining({ type: 'info', title: 'Cargando' }));
-    expect(showSpy).toHaveBeenCalledWith(expect.objectContaining({ type: 'error', title: 'Falló' }));
+    await expect(
+      service.promise(fakePromise, {
+        loading: 'Cargando',
+        success: 'Completado',
+        error: 'Falló',
+        position: 'top-right',
+      }),
+    ).rejects.toThrow('fail-error');
+
+    expect(showSpy).toHaveBeenCalledWith(
+      expect.objectContaining({ type: 'info', title: 'Cargando' }),
+    );
+    expect(showSpy).toHaveBeenCalledWith(
+      expect.objectContaining({ type: 'error', title: 'Falló' }),
+    );
   });
 });

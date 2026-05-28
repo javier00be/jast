@@ -10,6 +10,6 @@ import { NavbarComponent } from './layout/navbar/navbar';
     <app-navbar />
     <router-outlet />
   `,
-  styles: []
+  styles: [],
 })
 export class App {}

@@ -10,7 +10,6 @@ import { Component } from '@angular/core';
         <h2>En marcha en minutos.</h2>
 
         <div class="steps">
-
           <div class="step">
             <div class="step-num">01</div>
             <div class="step-body">
@@ -30,65 +29,66 @@ import { Component } from '@angular/core';
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </section>
   `,
-  styles: [`
-    section {
-      padding: 60px 32px 80px;
-    }
-    .inner {
-      max-width: var(--max-width);
-      margin: 0 auto;
-    }
-    .section-label {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 16px;
-    }
-    h2 {
-      font-size: clamp(28px, 4vw, 44px);
-      font-weight: 700;
-      letter-spacing: -1.2px;
-      line-height: 1.15;
-      margin-bottom: 36px;
-    }
-    .steps {
-      display: grid;
-      grid-template-columns: 1fr 1.6fr;
-      gap: 40px;
-      align-items: start;
-    }
-    .step {
-      display: flex;
-      gap: 20px;
-      align-items: flex-start;
-    }
-    .step-num {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--accent);
-      letter-spacing: 1px;
-      padding-top: 3px;
-      flex-shrink: 0;
-      width: 24px;
-    }
-    .step-body {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      h3 {
-        font-size: 15px;
-        font-weight: 600;
+  styles: [
+    `
+      section {
+        padding: 60px 32px 80px;
       }
-    }
-  `]
+      .inner {
+        max-width: var(--max-width);
+        margin: 0 auto;
+      }
+      .section-label {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 16px;
+      }
+      h2 {
+        font-size: clamp(28px, 4vw, 44px);
+        font-weight: 700;
+        letter-spacing: -1.2px;
+        line-height: 1.15;
+        margin-bottom: 36px;
+      }
+      .steps {
+        display: grid;
+        grid-template-columns: 1fr 1.6fr;
+        gap: 40px;
+        align-items: start;
+      }
+      .step {
+        display: flex;
+        gap: 20px;
+        align-items: flex-start;
+      }
+      .step-num {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--accent);
+        letter-spacing: 1px;
+        padding-top: 3px;
+        flex-shrink: 0;
+        width: 24px;
+      }
+      .step-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        h3 {
+          font-size: 15px;
+          font-weight: 600;
+        }
+      }
+    `,
+  ],
 })
 export class InstallComponent {
   usageCode = `import { Component, inject } from '@angular/core';

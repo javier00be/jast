@@ -36,12 +36,12 @@ export class JastToastRef implements PromiseLike<string | null> {
   constructor(
     private readonly _promise: Promise<string | null>,
     public readonly id: string,
-    private readonly _dismiss: () => void
+    private readonly _dismiss: () => void,
   ) {}
 
   then<TResult1 = string | null, TResult2 = never>(
     onfulfilled?: ((value: string | null) => TResult1 | PromiseLike<TResult1>) | null,
-    onrejected?: ((reason: unknown) => TResult2 | PromiseLike<TResult2>) | null
+    onrejected?: ((reason: unknown) => TResult2 | PromiseLike<TResult2>) | null,
   ): Promise<TResult1 | TResult2> {
     return this._promise.then(onfulfilled, onrejected);
   }
@@ -56,6 +56,6 @@ export type JastToastPromiseMessages = string | { title: string; description?: s
 export interface JastToastPromiseConfig {
   loading: JastToastPromiseMessages;
   success: JastToastPromiseMessages;
-  error:   JastToastPromiseMessages;
+  error: JastToastPromiseMessages;
   position?: JastToastPosition;
 }

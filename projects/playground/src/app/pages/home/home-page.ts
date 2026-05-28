@@ -15,6 +15,6 @@ import { FooterComponent } from '../../layout/footer/footer';
     <app-demo />
     <app-install />
     <app-footer />
-  `
+  `,
 })
 export class HomePageComponent {}

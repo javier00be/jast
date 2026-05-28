@@ -1,5 +1,10 @@
 import { Component, inject, signal } from '@angular/core';
-import { JastNotificationService, JastToastPosition, JastToastType, JastToastPromiseConfig } from 'jast-notification';
+import {
+  JastNotificationService,
+  JastToastPosition,
+  JastToastType,
+  JastToastPromiseConfig,
+} from 'jast-notification';
 
 @Component({
   selector: 'app-demo',
@@ -11,19 +16,24 @@ import { JastNotificationService, JastToastPosition, JastToastType, JastToastPro
           <div class="left">
             <div class="section-label">Playground</div>
             <h2>Pruébalo tú mismo.</h2>
-            <p class="subtitle">Elegí un tipo y hacé click en una posición para disparar el toast.</p>
+            <p class="subtitle">
+              Elegí un tipo y hacé click en una posición para disparar el toast.
+            </p>
             <div class="type-row">
               @for (t of types; track t.value) {
                 <button
                   class="type-btn"
                   [class.active]="selectedType() === t.value"
                   [style.--color]="t.color"
-                  (click)="selectedType.set(t.value)">
+                  (click)="selectedType.set(t.value)"
+                >
                   <span class="dot"></span>{{ t.label }}
                 </button>
               }
             </div>
-            <p class="hint">Hacé click en cualquier flecha para disparar el toast en esa posición</p>
+            <p class="hint">
+              Hacé click en cualquier flecha para disparar el toast en esa posición
+            </p>
 
             <div class="extras">
               <button class="extra-btn" (click)="fireConfirm()">
@@ -70,8 +80,12 @@ import { JastNotificationService, JastToastPosition, JastToastType, JastToastPro
                 <button class="pos-btn" (click)="fire('top-center')" title="top-center">↑</button>
                 <button class="pos-btn" (click)="fire('top-right')" title="top-right">↗</button>
                 <button class="pos-btn" (click)="fire('bottom-left')" title="bottom-left">↙</button>
-                <button class="pos-btn" (click)="fire('bottom-center')" title="bottom-center">↓</button>
-                <button class="pos-btn" (click)="fire('bottom-right')" title="bottom-right">↘</button>
+                <button class="pos-btn" (click)="fire('bottom-center')" title="bottom-center">
+                  ↓
+                </button>
+                <button class="pos-btn" (click)="fire('bottom-right')" title="bottom-right">
+                  ↘
+                </button>
               </div>
             </div>
           </div>
@@ -79,156 +93,177 @@ import { JastNotificationService, JastToastPosition, JastToastType, JastToastPro
       </div>
     </section>
   `,
-  styles: [`
-    section {
-      padding: 60px 32px;
-      background: var(--surface);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-    }
-    .inner {
-      max-width: var(--max-width);
-      margin: 0 auto;
-    }
-    .cols {
-      display: grid;
-      grid-template-columns: 1fr 1.6fr;
-      gap: 64px;
-      align-items: center;
-    }
-    .left {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-    .section-label {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--accent);
-    }
-    h2 {
-      font-size: clamp(28px, 4vw, 44px);
-      font-weight: 700;
-      letter-spacing: -1.2px;
-      margin: 0;
-    }
-    .subtitle {
-      font-size: 15px;
-      color: var(--text-secondary);
-      line-height: 1.6;
-    }
-    .type-row {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-    .type-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      padding: 8px 16px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      color: var(--text-secondary);
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.15s;
-      font-family: inherit;
-      .dot {
-        width: 7px;
-        height: 7px;
-        border-radius: 50%;
-        background: var(--color);
-        opacity: 0.4;
-        transition: opacity 0.15s;
-        flex-shrink: 0;
+  styles: [
+    `
+      section {
+        padding: 60px 32px;
+        background: var(--surface);
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
       }
-      &:hover { color: var(--text); border-color: rgba(255, 255, 255, 0.15); }
-      &.active {
-        color: var(--text);
-        border-color: var(--color);
-        .dot { opacity: 1; }
+      .inner {
+        max-width: var(--max-width);
+        margin: 0 auto;
       }
-    }
-    .screen {
-      background: var(--surface-2);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 20px;
-      aspect-ratio: 16 / 8;
-      display: flex;
-      align-items: stretch;
-    }
-    .pos-grid {
-      width: 100%;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      grid-template-rows: repeat(2, 1fr);
-      gap: 8px;
-    }
-    .pos-btn {
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--text-secondary);
-      border-radius: 8px;
-      font-size: 20px;
-      cursor: pointer;
-      transition: all 0.15s;
-      font-family: inherit;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      &:hover {
-        background: rgba(59, 130, 246, 0.08);
-        border-color: rgba(59, 130, 246, 0.25);
-        color: var(--text);
-        transform: scale(1.05);
+      .cols {
+        display: grid;
+        grid-template-columns: 1fr 1.6fr;
+        gap: 64px;
+        align-items: center;
       }
-      &:active { transform: scale(0.95); }
-    }
-    .hint {
-      font-size: 12px;
-      color: var(--text-secondary);
-      opacity: 0.5;
-    }
-    .extras {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-top: 8px;
-    }
-    .extra-btn {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 16px;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      background: var(--bg);
-      cursor: pointer;
-      font-family: inherit;
-      text-align: left;
-      transition: border-color 0.15s;
-      .extra-icon { font-size: 18px; flex-shrink: 0; }
-      strong { display: block; font-size: 13px; color: var(--text); }
-      span { font-size: 12px; color: var(--text-secondary); }
-      &:hover { border-color: rgba(59, 130, 246, 0.3); }
-    }
-    .confirm-result {
-      font-size: 13px;
-      color: var(--text-secondary);
-      margin-top: 8px;
-      code {
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 12px;
+      .left {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      .section-label {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
         color: var(--accent);
       }
-    }
-  `]
+      h2 {
+        font-size: clamp(28px, 4vw, 44px);
+        font-weight: 700;
+        letter-spacing: -1.2px;
+        margin: 0;
+      }
+      .subtitle {
+        font-size: 15px;
+        color: var(--text-secondary);
+        line-height: 1.6;
+      }
+      .type-row {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .type-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 8px 16px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--text-secondary);
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.15s;
+        font-family: inherit;
+        .dot {
+          width: 7px;
+          height: 7px;
+          border-radius: 50%;
+          background: var(--color);
+          opacity: 0.4;
+          transition: opacity 0.15s;
+          flex-shrink: 0;
+        }
+        &:hover {
+          color: var(--text);
+          border-color: rgba(255, 255, 255, 0.15);
+        }
+        &.active {
+          color: var(--text);
+          border-color: var(--color);
+          .dot {
+            opacity: 1;
+          }
+        }
+      }
+      .screen {
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 20px;
+        aspect-ratio: 16 / 8;
+        display: flex;
+        align-items: stretch;
+      }
+      .pos-grid {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+        gap: 8px;
+      }
+      .pos-btn {
+        border: 1px solid var(--border);
+        background: transparent;
+        color: var(--text-secondary);
+        border-radius: 8px;
+        font-size: 20px;
+        cursor: pointer;
+        transition: all 0.15s;
+        font-family: inherit;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        &:hover {
+          background: rgba(59, 130, 246, 0.08);
+          border-color: rgba(59, 130, 246, 0.25);
+          color: var(--text);
+          transform: scale(1.05);
+        }
+        &:active {
+          transform: scale(0.95);
+        }
+      }
+      .hint {
+        font-size: 12px;
+        color: var(--text-secondary);
+        opacity: 0.5;
+      }
+      .extras {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-top: 8px;
+      }
+      .extra-btn {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        background: var(--bg);
+        cursor: pointer;
+        font-family: inherit;
+        text-align: left;
+        transition: border-color 0.15s;
+        .extra-icon {
+          font-size: 18px;
+          flex-shrink: 0;
+        }
+        strong {
+          display: block;
+          font-size: 13px;
+          color: var(--text);
+        }
+        span {
+          font-size: 12px;
+          color: var(--text-secondary);
+        }
+        &:hover {
+          border-color: rgba(59, 130, 246, 0.3);
+        }
+      }
+      .confirm-result {
+        font-size: 13px;
+        color: var(--text-secondary);
+        margin-top: 8px;
+        code {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 12px;
+          color: var(--accent);
+        }
+      }
+    `,
+  ],
 })
 export class DemoComponent {
   private jast = inject(JastNotificationService);
@@ -236,17 +271,17 @@ export class DemoComponent {
   confirmResult = signal<string | null>(null);
 
   types: { value: JastToastType; label: string; color: string }[] = [
-    { value: 'success', label: 'Éxito',        color: '#10b981' },
-    { value: 'error',   label: 'Error',         color: '#ef4444' },
-    { value: 'warning', label: 'Advertencia',   color: '#f59e0b' },
-    { value: 'info',    label: 'Información',   color: '#3b82f6' },
+    { value: 'success', label: 'Éxito', color: '#10b981' },
+    { value: 'error', label: 'Error', color: '#ef4444' },
+    { value: 'warning', label: 'Advertencia', color: '#f59e0b' },
+    { value: 'info', label: 'Información', color: '#3b82f6' },
   ];
 
   private messages: Record<JastToastType, { title: string; description: string }> = {
-    success: { title: 'Operación exitosa',      description: 'Los cambios fueron guardados.' },
-    error:   { title: 'Algo salió mal',         description: 'Intentalo de nuevo más tarde.' },
-    warning: { title: 'Atención',               description: 'Esta acción no se puede deshacer.' },
-    info:    { title: 'Para que sepas',         description: 'Hay actualizaciones disponibles.' },
+    success: { title: 'Operación exitosa', description: 'Los cambios fueron guardados.' },
+    error: { title: 'Algo salió mal', description: 'Intentalo de nuevo más tarde.' },
+    warning: { title: 'Atención', description: 'Esta acción no se puede deshacer.' },
+    info: { title: 'Para que sepas', description: 'Hay actualizaciones disponibles.' },
   };
 
   fire(position: JastToastPosition): void {
@@ -295,14 +330,14 @@ export class DemoComponent {
 
   async fireAutoPromise(): Promise<void> {
     const fakeUpload = new Promise<void>((resolve, reject) =>
-      setTimeout(() => (Math.random() > 0.4 ? resolve() : reject(new Error())), 2000)
+      setTimeout(() => (Math.random() > 0.4 ? resolve() : reject(new Error())), 2000),
     );
 
     try {
       await this.jast.promise(fakeUpload, {
         loading: { title: 'Subiendo archivo...', description: 'Esperá un momento.' },
-        success: { title: '¡Subido!',            description: 'El archivo fue procesado.' },
-        error:   { title: 'Error al subir',      description: 'Intentalo de nuevo.' },
+        success: { title: '¡Subido!', description: 'El archivo fue procesado.' },
+        error: { title: 'Error al subir', description: 'Intentalo de nuevo.' },
         position: 'top-right',
       });
     } catch {

@@ -1,14 +1,14 @@
-import { Component, Input, ChangeDetectorRef, inject } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectorRef, OnInit, OnDestroy, inject } from '@angular/core';
 import { JastToastConfig } from './jast-toast.types';
 
 @Component({
   selector: 'jast-toast',
   standalone: true,
   template: `
-    <div [class]="toastClass">
+    <div [class]="toastClass" (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()">
 
-      <div class="jast-tab">
-        <div class="jast-icon">
+      <div [class]="tabClass">
+        <div [class]="iconClass">
           @switch (config.type) {
             @case ('success') {
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
@@ -24,14 +24,42 @@ import { JastToastConfig } from './jast-toast.types';
             }
           }
         </div>
-        <strong class="jast-title">{{ config.title }}</strong>
+        <strong [class]="titleClass">{{ config.title }}</strong>
+        @if (config.persistent) {
+          <button class="jast-close" (click)="actionClicked.emit('dismissed')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        }
       </div>
 
-      @if (config.description) {
+      @if (config.description || config.actions?.length || config.progress) {
         <div class="jast-body">
           <div class="jast-body-inner">
             <div class="jast-body-content">
-              <p class="jast-description">{{ config.description }}</p>
+
+              @if (config.description) {
+                <p [class]="descriptionClass">{{ config.description }}</p>
+              }
+
+              @if (config.actions?.length) {
+                <div class="jast-actions">
+                  @for (action of config.actions; track action.role) {
+                    <button
+                      class="jast-action"
+                      [class.jast-action--cancel]="action.role === 'cancel'"
+                      (click)="actionClicked.emit(action.role)">
+                      {{ action.label }}
+                    </button>
+                  }
+                </div>
+              }
+
+              @if (config.progress) {
+                <div class="jast-progress">
+                  <div class="jast-progress-bar" [style.animation-duration]="progressDuration"></div>
+                </div>
+              }
+
             </div>
           </div>
         </div>
@@ -46,14 +74,12 @@ import { JastToastConfig } from './jast-toast.types';
       align-items: center;
       font-family: system-ui, -apple-system, sans-serif;
       animation: toast-enter 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-      
-      /* Variables del diseño unificado */
+
       --toast-bg: #1c1c1e;
       --toast-text: #ffffff;
       --toast-desc: #a1a1aa;
       --curve-size: 16px;
-      
-      /* Sombra unificada y orgánica para toda la forma combinada */
+
       filter: drop-shadow(0 12px 30px rgba(0, 0, 0, 0.25));
     }
 
@@ -79,13 +105,11 @@ import { JastToastConfig } from './jast-toast.types';
       box-sizing: border-box;
     }
 
-    /* Alineación Izquierda (Flush con el borde izquierdo, elimina el "cuerno" y unifica la esquina) */
     .tab-left .jast-tab { margin-left: 0; }
     .tab-left:not(.bottom) .jast-body { border-top-left-radius: 0 !important; }
     .tab-left.bottom .jast-body { border-bottom-left-radius: 0 !important; }
     .tab-left .jast-tab::before { display: none !important; }
 
-    /* Alineación Derecha (Flush con el borde derecho, elimina el "cuerno" y unifica la esquina) */
     .tab-right .jast-tab { margin-right: 0; }
     .tab-right:not(.bottom) .jast-body { border-top-right-radius: 0 !important; }
     .tab-right.bottom .jast-body { border-bottom-right-radius: 0 !important; }
@@ -94,7 +118,6 @@ import { JastToastConfig } from './jast-toast.types';
     .bottom { flex-direction: column-reverse; }
     .bottom .jast-tab { margin-bottom: 0; margin-top: -16px; }
 
-    /* --- Esquinas Cóncavas Orgánicas (Inverted Border-Radius) --- */
     .has-body .jast-tab::before,
     .has-body .jast-tab::after {
       content: '';
@@ -103,20 +126,18 @@ import { JastToastConfig } from './jast-toast.types';
       height: var(--curve-size);
       pointer-events: none;
       opacity: 0;
-      transition: opacity 0.25s ease-out; /* Animación de opacidad limpia sin escalas para evitar el efecto de "inflado flotante" */
+      transition: opacity 0.25s ease-out;
       z-index: -1;
     }
 
-    /* Activación animada de las curvas */
     .expanded.has-body .jast-tab::before,
     .expanded.has-body .jast-tab::after {
       opacity: 1;
     }
 
-    /* Tab superior: círculo transparente en el extremo exterior, sólido en la unión */
     .jast-toast:not(.bottom) .jast-tab::before {
-      bottom: 15px; /* Un píxel de overlap vertical evita líneas de luz por subpixel-rendering */
-      right: calc(100% - 1px); /* Solapamiento de 1px lateral para evitar la línea de luz vertical por subpixel-rounding */
+      bottom: 15px;
+      right: calc(100% - 1px);
       background: radial-gradient(circle at 0 0, transparent var(--curve-size), var(--toast-bg) calc(var(--curve-size) + 0.5px));
     }
 
@@ -126,7 +147,6 @@ import { JastToastConfig } from './jast-toast.types';
       background: radial-gradient(circle at 100% 0, transparent var(--curve-size), var(--toast-bg) calc(var(--curve-size) + 0.5px));
     }
 
-    /* Tab inferior: círculo transparente en el extremo exterior, sólido en la unión */
     .jast-toast.bottom .jast-tab::before {
       top: 15px;
       right: calc(100% - 1px);
@@ -161,11 +181,9 @@ import { JastToastConfig } from './jast-toast.types';
 
     .jast-body-content { padding: 22px 18px 16px; }
 
-    /* Fase 2: expansión */
     .expanded .jast-body       { grid-template-rows: 1fr; }
     .expanded .jast-body-inner { transform: translateY(0); opacity: 1; }
 
-    /* Fase 3: body se pliega, tab queda como cápsula */
     .collapsing .jast-body {
       display: block;
       overflow: hidden;
@@ -176,7 +194,7 @@ import { JastToastConfig } from './jast-toast.types';
     }
 
     @keyframes body-collapse {
-      from { max-height: 200px; }
+      from { max-height: 300px; }
       to   { max-height: 0; }
     }
     @keyframes inner-fade-out {
@@ -184,7 +202,6 @@ import { JastToastConfig } from './jast-toast.types';
       to   { transform: translateY(-8px); opacity: 0; }
     }
 
-    /* Fase 4: tab sale solo */
     .exiting:not(.bottom) .jast-tab { animation: tab-exit-top    0.3s cubic-bezier(0.55, 0, 1, 0.45) forwards; }
     .exiting.bottom       .jast-tab { animation: tab-exit-bottom 0.3s cubic-bezier(0.55, 0, 1, 0.45) forwards; }
 
@@ -215,7 +232,21 @@ import { JastToastConfig } from './jast-toast.types';
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-width: 240px;
+      max-width: 220px;
+    }
+
+    .jast-close {
+      margin-left: auto;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 2px;
+      display: flex;
+      align-items: center;
+      opacity: 0.4;
+      transition: opacity 0.15s;
+      svg { width: 12px; height: 12px; stroke: #ffffff; }
+      &:hover { opacity: 0.9; }
     }
 
     .jast-description {
@@ -223,6 +254,57 @@ import { JastToastConfig } from './jast-toast.types';
       font-size: 14px;
       margin: 0;
       line-height: 1.55;
+    }
+
+    /* Action buttons */
+    .jast-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .jast-action {
+      flex: 1;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      font-family: inherit;
+      transition: all 0.15s;
+      background: #ffffff;
+      color: #111111;
+      &:hover { opacity: 0.88; }
+    }
+
+    .jast-action--cancel {
+      background: rgba(255, 255, 255, 0.07);
+      color: rgba(255, 255, 255, 0.55);
+      border-color: rgba(255, 255, 255, 0.08);
+      &:hover { background: rgba(255, 255, 255, 0.12); color: rgba(255, 255, 255, 0.8); }
+    }
+
+    /* Progress bar */
+    .jast-progress {
+      height: 2px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 1px;
+      overflow: hidden;
+      margin-top: 14px;
+    }
+
+    .jast-progress-bar {
+      height: 100%;
+      width: 100%;
+      border-radius: 1px;
+      transform-origin: left center;
+      animation: jast-progress linear forwards;
+    }
+
+    @keyframes jast-progress {
+      from { transform: scaleX(1); }
+      to   { transform: scaleX(0); }
     }
 
     .success .jast-icon { background: linear-gradient(135deg, #10b981, #059669); }
@@ -234,16 +316,29 @@ import { JastToastConfig } from './jast-toast.types';
     .error   .jast-title { color: #ef4444; }
     .warning .jast-title { color: #f59e0b; }
     .info    .jast-title { color: #3b82f6; }
+
+    .success .jast-progress-bar { background: #10b981; }
+    .error   .jast-progress-bar { background: #ef4444; }
+    .warning .jast-progress-bar { background: #f59e0b; }
+    .info    .jast-progress-bar { background: #3b82f6; }
+
+    .paused .jast-progress-bar { animation-play-state: paused; }
   `]
 })
-export class JastToastComponent {
+export class JastToastComponent implements OnInit, OnDestroy {
   @Input() config!: JastToastConfig;
   @Input() set hide(value: boolean) {
     if (value) setTimeout(() => this.startExit(), 0);
   }
+  @Output() actionClicked = new EventEmitter<string | null>();
 
   private cdr = inject(ChangeDetectorRef);
   phase: 'idle' | 'expanded' | 'collapsing' | 'exiting' = 'idle';
+  isPaused = false;
+
+  private remainingMs = 0;
+  private startTime = 0;
+  private timerId: ReturnType<typeof setTimeout> | null = null;
 
   constructor() {
     setTimeout(() => {
@@ -252,16 +347,68 @@ export class JastToastComponent {
     }, 350);
   }
 
+  ngOnInit(): void {
+    if (!this.config.persistent) {
+      this.startTimer(this.config.duration ?? 4000);
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.timerId !== null) clearTimeout(this.timerId);
+  }
+
+  private startTimer(ms: number): void {
+    this.remainingMs = ms;
+    this.startTime = Date.now();
+    this.timerId = setTimeout(() => {
+      this.timerId = null;
+      this.actionClicked.emit(null);
+    }, ms);
+  }
+
+  onMouseEnter(): void {
+    if (this.config.persistent || this.timerId === null) return;
+    clearTimeout(this.timerId);
+    this.timerId = null;
+    this.remainingMs = Math.max(0, this.remainingMs - (Date.now() - this.startTime));
+    this.isPaused = true;
+    this.cdr.detectChanges();
+  }
+
+  onMouseLeave(): void {
+    if (!this.isPaused || this.config.persistent) return;
+    this.isPaused = false;
+    this.startTimer(this.remainingMs);
+    this.cdr.detectChanges();
+  }
+
   private startExit(): void {
-    // Fase 3: body colapsa
     this.phase = 'collapsing';
     this.cdr.detectChanges();
-
-    // Fase 4: body ya colapsó, tab sale solo
     setTimeout(() => {
       this.phase = 'exiting';
       this.cdr.detectChanges();
     }, 400);
+  }
+
+  get progressDuration(): string {
+    return `${this.config?.duration ?? 4000}ms`;
+  }
+
+  get tabClass(): string {
+    return ['jast-tab', this.config?.styles?.tab].filter(Boolean).join(' ');
+  }
+
+  get iconClass(): string {
+    return ['jast-icon', this.config?.styles?.icon].filter(Boolean).join(' ');
+  }
+
+  get titleClass(): string {
+    return ['jast-title', this.config?.styles?.title].filter(Boolean).join(' ');
+  }
+
+  get descriptionClass(): string {
+    return ['jast-description', this.config?.styles?.description].filter(Boolean).join(' ');
   }
 
   get tabAlignment(): string {
@@ -272,9 +419,11 @@ export class JastToastComponent {
   }
 
   get toastClass(): string {
-    const type   = this.config?.type || 'info';
-    const bottom = (this.config?.position ?? '').startsWith('bottom') ? ' bottom' : '';
-    const hasBody = this.config?.description ? ' has-body' : '';
-    return `jast-toast ${type} ${this.tabAlignment} ${this.phase}${bottom}${hasBody}`;
+    const type    = this.config?.type || 'info';
+    const bottom  = (this.config?.position ?? '').startsWith('bottom') ? ' bottom' : '';
+    const hasBody = (this.config?.description || this.config?.actions?.length || this.config?.progress)
+      ? ' has-body' : '';
+    const paused  = this.isPaused ? ' paused' : '';
+    return `jast-toast ${type} ${this.tabAlignment} ${this.phase}${bottom}${hasBody}${paused}`;
   }
 }

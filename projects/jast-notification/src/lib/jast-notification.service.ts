@@ -2,7 +2,13 @@ import { Injectable, inject, ComponentRef } from '@angular/core';
 import { Overlay, GlobalPositionStrategy, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { JastToastContainerComponent } from './jast-toast-container.component';
-import { JastToastConfig, JastToastPosition } from './jast-toast.types';
+import {
+  JastToastConfig,
+  JastToastPosition,
+  JastToastRef,
+  JastToastPromiseConfig,
+  JastToastPromiseMessages,
+} from './jast-toast.types';
 
 interface PositionEntry {
   overlayRef: OverlayRef;
@@ -15,24 +21,26 @@ interface PositionEntry {
 export class JastNotificationService {
   private overlay = inject(Overlay);
   private positions = new Map<JastToastPosition, PositionEntry>();
+  private registry = new Map<string, JastToastRef>();
+  private nextToastId = 0;
+  maxToasts = Infinity;
 
   private getPositionStrategy(position: JastToastPosition = 'top-right'): GlobalPositionStrategy {
     const strategy = this.overlay.position().global();
     const offset = '24px';
 
     switch (position) {
-      case 'top-left':     return strategy.top(offset).left(offset);
-      case 'top-right':    return strategy.top(offset).right(offset);
-      case 'bottom-left':  return strategy.bottom(offset).left(offset);
-      case 'bottom-right': return strategy.bottom(offset).right(offset);
-      case 'top-center':   return strategy.top(offset).centerHorizontally();
-      case 'bottom-center':return strategy.bottom(offset).centerHorizontally();
-      case 'center':       return strategy.centerHorizontally().centerVertically();
-      default:             return strategy.top(offset).right(offset);
+      case 'top-left':      return strategy.top(offset).left(offset);
+      case 'top-right':     return strategy.top(offset).right(offset);
+      case 'bottom-left':   return strategy.bottom(offset).left(offset);
+      case 'bottom-right':  return strategy.bottom(offset).right(offset);
+      case 'top-center':    return strategy.top(offset).centerHorizontally();
+      case 'bottom-center': return strategy.bottom(offset).centerHorizontally();
+      default:              return strategy.top(offset).right(offset);
     }
   }
 
-  show(config: JastToastConfig): void {
+  show(config: JastToastConfig): JastToastRef {
     const position = config.position ?? 'top-right';
 
     let entry = this.positions.get(position);
@@ -46,17 +54,72 @@ export class JastNotificationService {
       this.positions.set(position, entry);
     }
 
-    entry.containerRef.instance.add(config, () => {
-      entry!.overlayRef.dispose();
+    const toastId = `jast-${this.nextToastId++}`;
+    const capturedEntry = entry;
+
+    const { id: internalId, result } = capturedEntry.containerRef.instance.add(config, this.maxToasts, () => {
+      capturedEntry.overlayRef.dispose();
       this.positions.delete(position);
     });
+
+    const ref = new JastToastRef(result, toastId, () => {
+      capturedEntry.containerRef.instance.dismiss(internalId);
+    });
+
+    this.registry.set(toastId, ref);
+    result.finally(() => this.registry.delete(toastId));
+
+    return ref;
   }
 
-  success(config: Omit<JastToastConfig, 'type'>): void {
-    this.show({ ...config, type: 'success' });
+  dismiss(id: string): void {
+    this.registry.get(id)?.dismiss();
   }
 
-  error(config: Omit<JastToastConfig, 'type'>): void {
-    this.show({ ...config, type: 'error' });
+  dismissAll(): void {
+    this.registry.forEach(ref => ref.dismiss());
+  }
+
+  async promise<T>(p: Promise<T>, config: JastToastPromiseConfig): Promise<T> {
+    const toMessages = (m: JastToastPromiseMessages) =>
+      typeof m === 'string' ? { title: m } : m;
+
+    const ref = this.show({
+      ...toMessages(config.loading),
+      type: 'info',
+      persistent: true,
+      position: config.position,
+    });
+
+    try {
+      const result = await p;
+      ref.dismiss();
+      this.show({ ...toMessages(config.success), type: 'success', position: config.position });
+      return result;
+    } catch (err) {
+      ref.dismiss();
+      this.show({ ...toMessages(config.error), type: 'error', position: config.position });
+      throw err;
+    }
+  }
+
+  success(config: Omit<JastToastConfig, 'type'>): JastToastRef {
+    return this.show({ ...config, type: 'success' });
+  }
+
+  error(config: Omit<JastToastConfig, 'type'>): JastToastRef {
+    return this.show({ ...config, type: 'error' });
+  }
+
+  warning(config: Omit<JastToastConfig, 'type'>): JastToastRef {
+    return this.show({ ...config, type: 'warning' });
+  }
+
+  info(config: Omit<JastToastConfig, 'type'>): JastToastRef {
+    return this.show({ ...config, type: 'info' });
+  }
+
+  confirm(config: Omit<JastToastConfig, 'type' | 'persistent'>): JastToastRef {
+    return this.show({ ...config, type: 'warning', persistent: true });
   }
 }

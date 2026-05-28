@@ -6,6 +6,7 @@ interface ToastEntry {
   id: number;
   config: JastToastConfig;
   hiding: boolean;
+  triggerHide: (action: string | null) => void;
 }
 
 @Component({
@@ -14,7 +15,10 @@ interface ToastEntry {
   imports: [JastToastComponent],
   template: `
     @for (toast of toasts; track toast.id) {
-      <jast-toast [config]="toast.config" [hide]="toast.hiding" />
+      <jast-toast
+        [config]="toast.config"
+        [hide]="toast.hiding"
+        (actionClicked)="onActionClicked(toast.id, $event)" />
     }
   `,
   styles: [`:host { display: flex; flex-direction: column; gap: 8px; }`]
@@ -24,22 +28,40 @@ export class JastToastContainerComponent {
   private nextId = 0;
   private cdr = inject(ChangeDetectorRef);
 
-  add(config: JastToastConfig, onEmpty: () => void): void {
+  add(config: JastToastConfig, maxToasts: number, onEmpty: () => void): { id: number; result: Promise<string | null> } {
+    const visible = this.toasts.filter(t => !t.hiding);
+    if (visible.length >= maxToasts) {
+      visible[0].triggerHide(null);
+    }
+
     const id = this.nextId++;
-    this.toasts.push({ id, config, hiding: false });
-
-    setTimeout(() => {
-      const entry = this.toasts.find(t => t.id === id);
-      if (entry) {
+    const result = new Promise<string | null>((resolve) => {
+      const triggerHide = (action: string | null) => {
+        const entry = this.toasts.find(t => t.id === id);
+        if (!entry || entry.hiding) return;
         entry.hiding = true;
-        this.cdr.detectChanges(); // zoneless: propagar [hide]=true al toast
-      }
+        this.cdr.detectChanges();
+        setTimeout(() => {
+          this.toasts = this.toasts.filter(t => t.id !== id);
+          this.cdr.detectChanges();
+          if (this.toasts.length === 0) onEmpty();
+          resolve(action);
+        }, 800);
+      };
 
-      setTimeout(() => {
-        this.toasts = this.toasts.filter(t => t.id !== id);
-        this.cdr.detectChanges(); // zoneless: propagar remoción del array
-        if (this.toasts.length === 0) onEmpty();
-      }, 800);
-    }, config.duration ?? 4000);
+      this.toasts.push({ id, config, hiding: false, triggerHide });
+      this.cdr.detectChanges();
+    });
+    return { id, result };
+  }
+
+  dismiss(id: number): void {
+    const entry = this.toasts.find(t => t.id === id);
+    entry?.triggerHide(null);
+  }
+
+  onActionClicked(id: number, role: string | null): void {
+    const entry = this.toasts.find(t => t.id === id);
+    entry?.triggerHide(role);
   }
 }

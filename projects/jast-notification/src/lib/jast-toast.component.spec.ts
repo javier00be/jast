@@ -25,7 +25,6 @@ describe('JastToastComponent', () => {
     fixture = TestBed.createComponent(JastToastComponent);
     component = fixture.componentInstance;
     component.config = { ...defaultConfig };
-    fixture.detectChanges();
   });
 
   afterEach(() => {
@@ -33,10 +32,12 @@ describe('JastToastComponent', () => {
   });
 
   it('should create', () => {
+    fixture.detectChanges();
     expect(component).toBeTruthy();
   });
 
   it('should resolve correct CSS classes based on config', () => {
+    fixture.detectChanges();
     expect(component.toastClass).toContain('success');
     expect(component.toastClass).toContain('tab-right');
     expect(component.toastClass).not.toContain('bottom');
@@ -58,6 +59,7 @@ describe('JastToastComponent', () => {
   });
 
   it('should auto-dismiss after configured duration', () => {
+    fixture.detectChanges();
     const spy = vi.spyOn(component.actionClicked, 'emit');
 
     // Avanzar el tiempo 3000ms (la duración configurada)
@@ -68,8 +70,7 @@ describe('JastToastComponent', () => {
 
   it('should not auto-dismiss if persistent', () => {
     component.config.persistent = true;
-    // Forzar re-ejecución del ciclo de vida para aplicar el ngOnInit correcto
-    component.ngOnInit();
+    fixture.detectChanges();
 
     const spy = vi.spyOn(component.actionClicked, 'emit');
     vi.advanceTimersByTime(3000);
@@ -78,6 +79,7 @@ describe('JastToastComponent', () => {
   });
 
   it('should pause timer on mouseenter and resume with remaining time on mouseleave', () => {
+    fixture.detectChanges();
     const spy = vi.spyOn(component.actionClicked, 'emit');
 
     // Dejar pasar 1000ms (quedan 2000ms)
@@ -105,14 +107,13 @@ describe('JastToastComponent', () => {
   });
 
   it('should emit action role when button is clicked', () => {
-    const spy = vi.spyOn(component.actionClicked, 'emit');
-
     component.config.actions = [
       { label: 'Cancelar', role: 'cancel' },
       { label: 'Confirmar', role: 'confirm' },
     ];
     fixture.detectChanges();
 
+    const spy = vi.spyOn(component.actionClicked, 'emit');
     component.actionClicked.emit('confirm');
     expect(spy).toHaveBeenCalledWith('confirm');
   });

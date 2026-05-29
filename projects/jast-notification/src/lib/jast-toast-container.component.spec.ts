@@ -36,7 +36,7 @@ describe('JastToastContainerComponent', () => {
 
     // Dismiss toast
     component.dismiss(id);
-    
+
     // Advance timers to trigger setTimeout inside triggerHide
     vi.advanceTimersByTime(800);
 
@@ -52,13 +52,13 @@ describe('JastToastContainerComponent', () => {
     const { id: firstId } = component.add({ title: 'First' }, 2, onEmptySpy);
     component.add({ title: 'Second' }, 2, onEmptySpy);
 
-    expect(component.toasts.filter(t => !t.hiding).length).toBe(2);
+    expect(component.toasts.filter((t) => !t.hiding).length).toBe(2);
 
     // Add a third toast which exceeds maxToasts (2)
     component.add({ title: 'Third' }, 2, onEmptySpy);
 
     // The first toast should have been triggered to hide
-    const firstToast = component.toasts.find(t => t.id === firstId);
+    const firstToast = component.toasts.find((t) => t.id === firstId);
     expect(firstToast?.hiding).toBe(true);
 
     vi.advanceTimersByTime(800); // Complete dismissal
@@ -81,13 +81,13 @@ describe('JastToastContainerComponent', () => {
   it('should do nothing if entry to dismiss does not exist or is already hiding', () => {
     const onEmptySpy = vi.fn();
     const { id } = component.add({ title: 'Test' }, 5, onEmptySpy);
-    
+
     // Dismissing an invalid id shouldn't crash
     component.dismiss(999);
     expect(component.toasts.length).toBe(1);
 
     // Triggering dismiss multiple times shouldn't cause double triggers
-    const entry = component.toasts.find(t => t.id === id);
+    const entry = component.toasts.find((t) => t.id === id);
     if (entry) {
       entry.triggerHide('dismissed');
       const filterSpy = vi.spyOn(component.toasts, 'filter');

@@ -1,13 +1,13 @@
 change: responsive-playground
 active_store: openspec
-current_phase: tasks
-status: tasks-completed
-next_recommended: apply
+current_phase: verify
+status: verify-completed
+next_recommended: archive
 phases:
   proposal: completed
   specs: completed
   design: completed
   tasks: completed
-  apply: pending
-  verify: pending
+  apply: completed
+  verify: completed
   archive: pending

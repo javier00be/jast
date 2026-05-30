@@ -44,6 +44,13 @@ import { Component } from '@angular/core';
           }
         }
       }
+      @media (max-width: 600px) {
+        .inner {
+          flex-direction: column;
+          gap: 16px;
+          text-align: center;
+        }
+      }
     `,
   ],
 })

@@ -87,6 +87,15 @@ import { Component } from '@angular/core';
           font-weight: 600;
         }
       }
+      @media (max-width: 768px) {
+        section {
+          padding: 40px 16px;
+        }
+        .steps {
+          grid-template-columns: 1fr;
+          gap: 28px;
+        }
+      }
     `,
   ],
 })

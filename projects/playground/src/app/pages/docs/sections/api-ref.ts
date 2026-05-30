@@ -402,6 +402,74 @@ import { Component } from '@angular/core';
         font-size: 13px;
         margin-bottom: 14px;
       }
+      @media (max-width: 600px) {
+        .method-header,
+        .prop-header {
+          display: none !important;
+        }
+        .method-table,
+        .prop-table {
+          border: none !important;
+          background: transparent !important;
+        }
+        .method-row,
+        .prop-row,
+        .styles-row,
+        .inline-prop {
+          grid-template-columns: 1fr !important;
+          display: flex !important;
+          flex-direction: column !important;
+          align-items: flex-start !important;
+          gap: 8px !important;
+          padding: 16px !important;
+          background: var(--surface) !important;
+          border: 1px solid var(--border) !important;
+          border-radius: 12px !important;
+          margin-bottom: 12px !important;
+        }
+        .method-name,
+        .prop-name {
+          font-size: 14px !important;
+          font-weight: 700 !important;
+          color: var(--accent) !important;
+          border-bottom: 1px solid var(--border) !important;
+          padding-bottom: 4px !important;
+          width: 100% !important;
+        }
+        .method-param::before {
+          content: 'Parámetro: ' !important;
+          font-weight: 600 !important;
+          color: var(--text-secondary) !important;
+          opacity: 0.7;
+        }
+        .prop-type::before {
+          content: 'Tipo: ' !important;
+          font-weight: 600 !important;
+          color: var(--text-secondary) !important;
+          opacity: 0.7;
+        }
+        .prop-default::before {
+          content: 'Default: ' !important;
+          font-weight: 600 !important;
+          color: var(--text-secondary) !important;
+          opacity: 0.7;
+        }
+        .method-desc,
+        .prop-desc {
+          margin-top: 4px;
+          font-size: 13px !important;
+          color: var(--text-secondary) !important;
+          line-height: 1.5 !important;
+        }
+        .screen-preview {
+          aspect-ratio: auto !important;
+          min-height: 200px !important;
+        }
+        .pos-label {
+          font-size: 9px !important;
+          padding: 2px 4px !important;
+        }
+      }
     `,
   ],
 })

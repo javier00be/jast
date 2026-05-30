@@ -209,6 +209,47 @@ import { Component } from '@angular/core';
           font-size: 12px;
         }
       }
+      @media (max-width: 600px) {
+        .prop-header {
+          display: none !important;
+        }
+        .prop-table {
+          border: none !important;
+          background: transparent !important;
+        }
+        .prop-row {
+          grid-template-columns: 1fr !important;
+          display: flex !important;
+          flex-direction: column !important;
+          align-items: flex-start !important;
+          gap: 8px !important;
+          padding: 16px !important;
+          background: var(--surface) !important;
+          border: 1px solid var(--border) !important;
+          border-radius: 12px !important;
+          margin-bottom: 12px !important;
+        }
+        .var-name {
+          font-size: 14px !important;
+          font-weight: 700 !important;
+          color: var(--accent) !important;
+          border-bottom: 1px solid var(--border) !important;
+          padding-bottom: 4px !important;
+          width: 100% !important;
+        }
+        .var-default::before {
+          content: 'Default: ' !important;
+          font-weight: 600 !important;
+          color: var(--text-secondary) !important;
+          opacity: 0.7;
+        }
+        .var-desc {
+          margin-top: 4px;
+          font-size: 13px !important;
+          color: var(--text-secondary) !important;
+          line-height: 1.5 !important;
+        }
+      }
     `,
   ],
 })

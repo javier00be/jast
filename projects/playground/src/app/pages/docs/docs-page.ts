@@ -94,6 +94,49 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
         min-width: 0;
         max-width: 820px;
       }
+      @media (max-width: 768px) {
+        .docs-layout {
+          display: flex;
+          flex-direction: column;
+          grid-template-columns: 1fr;
+        }
+        .sidebar {
+          position: static;
+          height: auto;
+          border-right: none;
+          border-bottom: 1px solid var(--border);
+          padding: 16px;
+          flex-direction: row;
+          align-items: center;
+          overflow-x: auto;
+          gap: 16px;
+          white-space: nowrap;
+          scrollbar-width: none;
+          -webkit-overflow-scrolling: touch;
+          &::-webkit-scrollbar {
+            display: none;
+          }
+        }
+        .back {
+          padding: 6px 12px;
+          background: var(--surface-2);
+          border-radius: 8px;
+          display: inline-flex;
+          align-items: center;
+        }
+        .nav-group {
+          flex-direction: row;
+          align-items: center;
+          gap: 8px;
+        }
+        .nav-label {
+          display: none;
+        }
+        .content {
+          padding: 24px 16px;
+          max-width: 100%;
+        }
+      }
     `,
   ],
 })

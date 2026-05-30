@@ -138,6 +138,26 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
         stroke: currentColor;
         stroke-width: 2.2;
       }
+      @media (max-width: 768px) {
+        nav {
+          padding: 0 16px;
+        }
+        .logo-sub {
+          display: none;
+        }
+        .links {
+          gap: 16px;
+        }
+      }
+      @media (max-width: 480px) {
+        .github-btn span {
+          display: none;
+        }
+        .github-btn {
+          padding: 6px;
+          border-radius: 50%;
+        }
+      }
     `,
   ],
 })

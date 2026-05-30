@@ -262,6 +262,35 @@ import {
           color: var(--accent);
         }
       }
+      @media (max-width: 968px) {
+        section {
+          padding: 40px 16px;
+        }
+        .cols {
+          grid-template-columns: 1fr;
+          gap: 40px;
+        }
+        .left {
+          gap: 16px;
+        }
+        .right {
+          justify-content: center;
+          margin-top: 0;
+          width: 100%;
+        }
+        .screen {
+          aspect-ratio: auto;
+          min-height: 280px;
+          width: 100%;
+          padding: 16px;
+        }
+        .type-row {
+          justify-content: center;
+        }
+        .extras {
+          width: 100%;
+        }
+      }
     `,
   ],
 })

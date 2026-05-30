@@ -136,6 +136,11 @@ import { Component } from '@angular/core';
         color: var(--text-secondary);
         line-height: 1.65;
       }
+      @media (max-width: 768px) {
+        section {
+          padding: 40px 16px;
+        }
+      }
     `,
   ],
 })

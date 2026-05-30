@@ -95,6 +95,16 @@ import { Component } from '@angular/core';
           grid-template-columns: 1fr;
           gap: 28px;
         }
+        .step {
+          width: 100%;
+          min-width: 0;
+        }
+        .step-body {
+          min-width: 0;
+        }
+        .code-block {
+          max-width: 100%;
+        }
       }
     `,
   ],

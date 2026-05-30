@@ -47,6 +47,7 @@ body {
   border: 1px solid var(--border);
   border-radius: 12px;
   overflow: hidden;
+  max-width: 100%;
   margin: 18px 0 28px;
   font-family: 'JetBrains Mono', monospace;
   position: relative;
@@ -96,6 +97,8 @@ body {
 .editor-body {
   padding: 22px 24px;
   position: relative;
+  overflow-x: auto;
+  max-width: 100%;
 }
 
 .editor-lines {
@@ -170,6 +173,7 @@ body {
   font-size: 13px;
   color: var(--text);
   overflow-x: auto;
+  max-width: 100%;
   margin: 18px 0 28px;
   position: relative;
 

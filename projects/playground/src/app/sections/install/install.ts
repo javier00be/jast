@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 
 @Component({
   selector: 'app-install',
@@ -15,6 +15,38 @@ import { Component } from '@angular/core';
             <div class="step-body">
               <h3>Instalá</h3>
               <div class="code-block">
+                <button
+                  class="copy-btn"
+                  [class.copied]="copiedInstall()"
+                  (click)="copyCode('npm install jast-notification', 'install')"
+                >
+                  @if (copiedInstall()) {
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="14"
+                      height="14"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                    >
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <span>¡Copiado!</span>
+                  } @else {
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="14"
+                      height="14"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                    >
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copiar</span>
+                  }
+                </button>
                 <pre><code><span class="prompt">$</span> npm install jast-notification</code></pre>
               </div>
             </div>
@@ -25,6 +57,38 @@ import { Component } from '@angular/core';
             <div class="step-body">
               <h3>Inyectá y usá</h3>
               <div class="code-block multiline">
+                <button
+                  class="copy-btn"
+                  [class.copied]="copiedUsage()"
+                  (click)="copyCode(usageCode, 'usage')"
+                >
+                  @if (copiedUsage()) {
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="14"
+                      height="14"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                    >
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <span>¡Copiado!</span>
+                  } @else {
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="14"
+                      height="14"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                    >
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    <span>Copiar</span>
+                  }
+                </button>
                 <pre><code>{{ usageCode }}</code></pre>
               </div>
             </div>
@@ -110,6 +174,9 @@ import { Component } from '@angular/core';
   ],
 })
 export class InstallComponent {
+  copiedInstall = signal(false);
+  copiedUsage = signal(false);
+
   usageCode = `import { Component, inject } from '@angular/core';
 import { JastNotificationService } from 'jast-notification';
 
@@ -124,4 +191,15 @@ export class MyComponent {
     });
   }
 }`;
+
+  copyCode(text: string, type: 'install' | 'usage') {
+    navigator.clipboard.writeText(text);
+    if (type === 'install') {
+      this.copiedInstall.set(true);
+      setTimeout(() => this.copiedInstall.set(false), 2000);
+    } else {
+      this.copiedUsage.set(true);
+      setTimeout(() => this.copiedUsage.set(false), 2000);
+    }
+  }
 }

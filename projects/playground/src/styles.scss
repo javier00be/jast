@@ -163,6 +163,12 @@ body {
   }
 }
 
+.code-block .copy-btn {
+  top: 6px;
+  right: 12px;
+  z-index: 10;
+}
+
 /* Editores de Código Standard (Cajas de Código con estilo macOS sin sombras) */
 .code-block {
   background: var(--surface);
@@ -172,7 +178,7 @@ body {
   font-family: 'JetBrains Mono', monospace;
   font-size: 13px;
   color: var(--text);
-  overflow-x: auto;
+  overflow: hidden; /* No scroll en el contenedor principal, mantiene la cabecera fija */
   max-width: 100%;
   margin: 18px 0 28px;
   position: relative;
@@ -180,6 +186,19 @@ body {
   pre {
     margin: 0;
     white-space: pre;
+    overflow-x: auto; /* El scroll horizontal se aplica solo al contenido del pre */
+    max-width: 100%;
+    scrollbar-width: thin;
+    &::-webkit-scrollbar {
+      height: 6px;
+    }
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 3px;
+    }
   }
 
   code {

@@ -18,6 +18,7 @@ graph TD
 ```
 
 ### Solución Técnica CSS para la Documentación:
+
 ```css
 @media (max-width: 768px) {
   .docs-layout {
@@ -72,6 +73,7 @@ graph TD
 Para evitar reescribir las tablas en HTML, usaremos remapeo de visualización por CSS Grid/Flex en pantallas chicas (`max-width: 600px`).
 
 ### Estructura de Clases Reutilizada:
+
 ```css
 @media (max-width: 600px) {
   /* 1. Ocultar cabeceras tabulares */
@@ -121,7 +123,7 @@ Para evitar reescribir las tablas en HTML, usaremos remapeo de visualización po
     color: var(--text-secondary) !important;
     opacity: 0.7;
   }
-  
+
   .prop-type::before {
     content: 'Tipo: ' !important;
     font-weight: 600 !important;
@@ -195,6 +197,7 @@ Para la demo interactiva, colapsaremos la pantalla del simulador a ancho complet
 ## 4. Optimizaciones en Navbar y Footer (`navbar.ts` / `footer.ts`)
 
 - **Navbar**: Reducción de ancho en celular y ocultamiento selectivo del texto secundario del logo.
+
 ```css
 @media (max-width: 768px) {
   nav {
@@ -219,6 +222,7 @@ Para la demo interactiva, colapsaremos la pantalla del simulador a ancho complet
 ```
 
 - **Footer**: Centrado de enlaces y texto.
+
 ```css
 @media (max-width: 600px) {
   .inner {
@@ -232,5 +236,6 @@ Para la demo interactiva, colapsaremos la pantalla del simulador a ancho complet
 ---
 
 ## 5. Decisiones de Diseño Técnico Premium (SOLID)
+
 - **CSS Encapsulado**: Las reglas responsivas se mantendrán encapsuladas dentro de la directiva `@Component.styles` de cada archivo TS. Esto respeta la arquitectura stand-alone de Angular y evita contaminar el archivo global `styles.scss` con selectores innecesarios.
 - **Sin Dependencias**: Todo el comportamiento se resuelve con CSS estándar nativo de los navegadores actuales, lo cual reduce tiempos de renderizado y el bundle size final del Playground.

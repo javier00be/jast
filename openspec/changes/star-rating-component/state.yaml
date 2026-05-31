@@ -1,13 +1,13 @@
 change: star-rating-component
 active_store: openspec
-current_phase: tasks
-status: tasks-completed
-next_recommended: apply
+current_phase: archive
+status: archived
+next_recommended: none
 phases:
   proposal: completed
   specs: completed
   design: completed
   tasks: completed
-  apply: pending
-  verify: pending
-  archive: pending
+  apply: completed
+  verify: completed
+  archive: completed

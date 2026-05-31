@@ -35,6 +35,15 @@ import { Component } from '@angular/core';
               <a href="#demo" class="primary">Pruébalo ahora</a>
               <a href="#install" class="secondary">Empezar →</a>
             </div>
+
+            <div class="hero-trust">
+              <svg class="trust-star" viewBox="0 0 24 24" fill="#f59e0b" stroke="#f59e0b">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+                ></polygon>
+              </svg>
+              <span>4.9/5 · Calificación promedio de la comunidad</span>
+            </div>
           </div>
 
           <div class="right">
@@ -283,6 +292,32 @@ import { Component } from '@angular/core';
         gap: 14px;
         flex-wrap: wrap;
         align-items: center;
+      }
+      .hero-trust {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 24px;
+        font-size: 12px;
+        color: var(--text-secondary);
+        font-weight: 500;
+        span {
+          letter-spacing: -0.1px;
+        }
+      }
+      .trust-star {
+        width: 14px;
+        height: 14px;
+        animation: pulse-grow 2.5s infinite ease-in-out;
+      }
+      @keyframes pulse-grow {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.2);
+        }
       }
       .primary {
         display: inline-flex;
@@ -558,7 +593,8 @@ import { Component } from '@angular/core';
           text-align: center;
         }
         .badge,
-        .ctas {
+        .ctas,
+        .hero-trust {
           margin-left: auto;
           margin-right: auto;
           justify-content: center;

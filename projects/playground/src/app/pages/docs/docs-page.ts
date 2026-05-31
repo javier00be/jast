@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { SidebarRatingComponent } from '../../layout/sidebar-rating/sidebar-rating';
 
 @Component({
   selector: 'app-docs-page',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, RouterOutlet],
+  imports: [RouterLink, RouterLinkActive, RouterOutlet, SidebarRatingComponent],
   template: `
     <div class="docs-layout">
       <aside class="sidebar">
@@ -20,10 +21,13 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
           <a routerLink="/docs/api" routerLinkActive="active">API Reference</a>
           <a routerLink="/docs/styling" routerLinkActive="active">Personalización</a>
         </div>
+
+        <app-sidebar-rating class="docs-sidebar-rating" />
       </aside>
 
       <main class="content">
         <router-outlet />
+        <app-sidebar-rating class="docs-content-rating" />
       </main>
     </div>
   `,
@@ -94,6 +98,13 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
         min-width: 0;
         max-width: 820px;
       }
+      .docs-sidebar-rating {
+        display: block;
+        margin-top: auto;
+      }
+      .docs-content-rating {
+        display: none;
+      }
       @media (max-width: 768px) {
         .docs-layout {
           display: flex;
@@ -135,6 +146,15 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
         .content {
           padding: 24px 16px;
           max-width: 100%;
+        }
+        .docs-sidebar-rating {
+          display: none !important;
+        }
+        .docs-content-rating {
+          display: block !important;
+          margin-top: 48px;
+          border-top: 1px solid var(--border);
+          padding-top: 32px;
         }
       }
     `,

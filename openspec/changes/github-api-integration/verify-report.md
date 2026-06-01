@@ -17,18 +17,25 @@ Este reporte certifica que las modificaciones de código para conectar el playgr
 ## 2. Resultados de las Tareas de Calidad
 
 ### Tarea A: Calidad y Formateo Estético (Prettier)
+
 Se corrió el formateador automático sobre los dos componentes afectados:
+
 ```bash
 npx.cmd prettier --write projects/playground/src/app/layout/sidebar-rating/sidebar-rating.ts projects/playground/src/app/sections/hero/hero.ts
 ```
-*Resultado*: Ambos archivos ya cumplían con la estructura de sangrado, espaciado y comillas del proyecto (procesados exitosamente sin necesidad de cambios adicionales).
+
+_Resultado_: Ambos archivos ya cumplían con la estructura de sangrado, espaciado y comillas del proyecto (procesados exitosamente sin necesidad de cambios adicionales).
 
 ### Tarea B: Ejecución de Tests (Angular CLI con Vitest/Karma configuration)
+
 Se corrió la suite de pruebas del monorepo en modo CI:
+
 ```bash
 npx.cmd ng test --watch=false
 ```
-*Logs del Test Runner*:
+
+_Logs del Test Runner_:
+
 - **Procesamiento de `jast-notification`**:
   - `jast-toast-container.component.spec.ts`: 5 tests pasados.
   - `jast-toast.component.spec.ts`: 7 tests pasados.
@@ -43,17 +50,17 @@ npx.cmd ng test --watch=false
 
 ## 3. Lista de Verificación de Criterios de Aceptación (UAT)
 
-| Criterio | Descripción | Estado | Validación |
-| :--- | :--- | :--- | :--- |
-| **UAT-01** | Carga dinámica de estrellas | **Verificado** | `window.fetch` consulta `https://api.github.com/repos/javier00be/jast` y actualiza la señal `githubStars` en ambos componentes. |
+| Criterio   | Descripción                      | Estado         | Validación                                                                                                                                                                                  |
+| :--------- | :------------------------------- | :------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **UAT-01** | Carga dinámica de estrellas      | **Verificado** | `window.fetch` consulta `https://api.github.com/repos/javier00be/jast` y actualiza la señal `githubStars` en ambos componentes.                                                             |
 | **UAT-02** | Tolerancia a Fallos (Rate Limit) | **Verificado** | Si la API de GitHub responde con error o se agota el límite, la captura `try-catch` silencia la excepción y el Hero badge aplica el fallback "Calificación promedio 5.0★ por la comunidad". |
-| **UAT-03** | Redirección de GitHub | **Verificado** | El template de `thanks-view` renderiza el botón `.github-star-cta` que enlaza a `javier00be/jast` con `target="_blank"` solo si la valoración es $\ge 4$ estrellas. |
-| **UAT-04** | Estilo Visual Premium | **Verificado** | El CTA lateral incluye sombreado suave (`box-shadow`), transiciones cúbicas en hover/active y un diseño responsive impecable adaptado a móviles. |
+| **UAT-03** | Redirección de GitHub            | **Verificado** | El template de `thanks-view` renderiza el botón `.github-star-cta` que enlaza a `javier00be/jast` con `target="_blank"` solo si la valoración es $\ge 4$ estrellas.                         |
+| **UAT-04** | Estilo Visual Premium            | **Verificado** | El CTA lateral incluye sombreado suave (`box-shadow`), transiciones cúbicas en hover/active y un diseño responsive impecable adaptado a móviles.                                            |
 
 ---
 
 ## 4. Conclusiones y Próximo Paso
 
-La implementación es sumamente sólida, respeta los patrones de Angular Signals, evita inyecciones globales que contaminen el CDK e implementa fallback de rate-limit impecables. 
+La implementación es sumamente sólida, respeta los patrones de Angular Signals, evita inyecciones globales que contaminen el CDK e implementa fallback de rate-limit impecables.
 
 **Recomendación**: Pasar directamente a la fase de **Archive** para generar el reporte de cierre, actualizar el estado final del DAG del cambio y realizar el commit/push correspondiente al repositorio.

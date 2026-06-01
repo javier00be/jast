@@ -17,6 +17,7 @@ Este reporte concluye formalmente el desarrollo, verificación e integración de
 ## 2. Inventario de Artefactos de Especificación (SDD)
 
 Durante el ciclo de desarrollo se han generado los siguientes documentos de trazabilidad dentro de [openspec/changes/github-api-integration/](file:///C:/Users/Javier/Documents/jast-workspace/openspec/changes/github-api-integration/):
+
 1. [proposal.md](file:///C:/Users/Javier/Documents/jast-workspace/openspec/changes/github-api-integration/proposal.md): Propuesta inicial y análisis de viabilidad (fetch asíncrono y CTA condicional).
 2. [spec.md](file:///C:/Users/Javier/Documents/jast-workspace/openspec/changes/github-api-integration/spec.md): Especificaciones de comportamiento UAT y tolerancia a fallos por rate limits.
 3. [design.md](file:///C:/Users/Javier/Documents/jast-workspace/openspec/changes/github-api-integration/design.md): Diseño técnico detallado (estructuras HTML, TypeScript y hojas CSS de los componentes).
@@ -29,12 +30,14 @@ Durante el ciclo de desarrollo se han generado los siguientes documentos de traz
 ## 3. Estado Final del Código
 
 ### A. Sidebar Rating Component (`sidebar-rating.ts`)
-* Se añadió la señal reactiva `githubStars` que consulta la API en `ngOnInit`.
-* El bloque de agradecimiento `@else` ahora incluye condicionalmente un botón de invitación `.github-star-cta` con animaciones cúbicas premium que redirige al repositorio de GitHub solo para calificaciones de $\ge 4$ estrellas.
+
+- Se añadió la señal reactiva `githubStars` que consulta la API en `ngOnInit`.
+- El bloque de agradecimiento `@else` ahora incluye condicionalmente un botón de invitación `.github-star-cta` con animaciones cúbicas premium que redirige al repositorio de GitHub solo para calificaciones de $\ge 4$ estrellas.
 
 ### B. Hero Component (`hero.ts`)
-* Se conectó la badge de estrellas de GitHub para consumir la API asincrónicamente y renderizar las estrellas en vivo con una animación de latido suave.
-* En caso de error de conexión o exceso de peticiones, se garantiza un fallback impecable ("Calificación promedio 5.0★ por la comunidad") sin generar excepciones.
+
+- Se conectó la badge de estrellas de GitHub para consumir la API asincrónicamente y renderizar las estrellas en vivo con una animación de latido suave.
+- En caso de error de conexión o exceso de peticiones, se garantiza un fallback impecable ("Calificación promedio 5.0★ por la comunidad") sin generar excepciones.
 
 ---
 

@@ -21,7 +21,8 @@ Evaluamos el impacto del cambio antes de escribir una sola línea de código:
 A continuación se detallan las unidades de trabajo exactas con sus respectivos commits convencionales. Todos los commits se realizarán de forma atómica y sin atribución automática de IA.
 
 ### Tarea 1: Widget de valoración lateral (`sidebar-rating.ts`)
-- **Descripción**: 
+
+- **Descripción**:
   - Importar `signal` e `OnInit` (si no están importados).
   - Definir la señal `githubStars` inicializada en `'—'`.
   - Crear el método asincrónico `fetchStars()` con manejo robusto de errores mediante `try-catch` para llamar a la API pública de GitHub.
@@ -32,6 +33,7 @@ A continuación se detallan las unidades de trabajo exactas con sus respectivos 
 - **Commit Convencional**: `feat(playground): fetch github stars and add rating cta in sidebar`
 
 ### Tarea 2: Insignia de Confianza en la Sección Hero (`hero.ts`)
+
 - **Descripción**:
   - Modificar las importaciones para incluir `OnInit` y `signal` desde `@angular/core`.
   - Agregar `implements OnInit` a la declaración de `HeroComponent`.
@@ -43,6 +45,7 @@ A continuación se detallan las unidades de trabajo exactas con sus respectivos 
 - **Commit Convencional**: `feat(playground): display live github star count in hero trust badge`
 
 ### Tarea 3: Verificación y Calidad
+
 - **Descripción**:
   - Ejecutar formateo de código automático mediante Prettier.
   - Ejecutar el juego de pruebas unitarias completo para asegurar que todos los tests existentes de la aplicación playground y la librería jast siguen pasando sin regresiones (23/23 tests OK).
@@ -55,9 +58,9 @@ A continuación se detallan las unidades de trabajo exactas con sus respectivos 
 
 ## 3. Matriz de Trazabilidad y Verificación
 
-| ID | Requisito | Archivo | Criterio de Aceptación | Estado |
-| :--- | :--- | :--- | :--- | :--- |
-| **REQ-01** | Live star counts | `hero.ts` & `sidebar-rating.ts` | Consulta asincrónica sin bloquear renderizado. | Pendiente |
-| **REQ-02** | Fallback elegante | `hero.ts` | Texto "Calificación promedio 5.0★ por la comunidad" si falla. | Pendiente |
-| **REQ-03** | Redirección GitHub | `sidebar-rating.ts` | Botón premium `.github-star-cta` visible con valoraciones >= 4. | Pendiente |
-| **REQ-04** | Tests e Integridad | Proyectos del monorepo | 100% de tests unitarios aprobados y formateo limpio. | Pendiente |
+| ID         | Requisito          | Archivo                         | Criterio de Aceptación                                          | Estado    |
+| :--------- | :----------------- | :------------------------------ | :-------------------------------------------------------------- | :-------- |
+| **REQ-01** | Live star counts   | `hero.ts` & `sidebar-rating.ts` | Consulta asincrónica sin bloquear renderizado.                  | Pendiente |
+| **REQ-02** | Fallback elegante  | `hero.ts`                       | Texto "Calificación promedio 5.0★ por la comunidad" si falla.   | Pendiente |
+| **REQ-03** | Redirección GitHub | `sidebar-rating.ts`             | Botón premium `.github-star-cta` visible con valoraciones >= 4. | Pendiente |
+| **REQ-04** | Tests e Integridad | Proyectos del monorepo          | 100% de tests unitarios aprobados y formateo limpio.            | Pendiente |

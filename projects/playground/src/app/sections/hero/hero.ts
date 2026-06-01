@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 
 @Component({
   selector: 'app-hero',
@@ -42,7 +42,13 @@ import { Component } from '@angular/core';
                   points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
                 ></polygon>
               </svg>
-              <span>4.9/5 · Calificación promedio de la comunidad</span>
+              <span>
+                @if (githubStars() !== '—') {
+                  {{ githubStars() }} estrellas en GitHub · Calificación promedio 5.0★
+                } @else {
+                  Calificación promedio 5.0★ por la comunidad
+                }
+              </span>
             </div>
           </div>
 
@@ -610,4 +616,24 @@ import { Component } from '@angular/core';
     `,
   ],
 })
-export class HeroComponent {}
+export class HeroComponent implements OnInit {
+  githubStars = signal<string>('—');
+
+  ngOnInit(): void {
+    this.fetchStars();
+  }
+
+  async fetchStars(): Promise<void> {
+    try {
+      const res = await fetch('https://api.github.com/repos/javier00be/jast');
+      if (res.ok) {
+        const data = await res.json();
+        if (data && typeof data.stargazers_count === 'number') {
+          this.githubStars.set(data.stargazers_count.toString());
+        }
+      }
+    } catch (err) {
+      // Silencio de fallback elegante
+    }
+  }
+}

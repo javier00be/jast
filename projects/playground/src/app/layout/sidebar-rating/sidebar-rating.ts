@@ -32,6 +32,16 @@ import { JastNotificationService } from 'jast-notification';
           <span class="thanks-icon">🎉</span>
           <span class="rating-title">¡Gracias por valorar!</span>
           <span class="rating-sub">Registramos tu opinión ({{ rating() }}★)</span>
+          @if ((rating() ?? 0) >= 4) {
+            <a
+              href="https://github.com/javier00be/jast"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="github-star-cta"
+            >
+              ¡Dejanos una estrella en GitHub! ⭐
+            </a>
+          }
         </div>
       }
     </div>
@@ -125,6 +135,34 @@ import { JastNotificationService } from 'jast-notification';
           transform: scale(1);
         }
       }
+      .github-star-cta {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 10px;
+        padding: 10px 16px;
+        background: var(--text);
+        color: var(--bg);
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        border: 1px solid var(--text);
+        width: 100%;
+        text-align: center;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+
+        &:hover {
+          transform: translateY(-2px);
+          background: transparent;
+          color: var(--text);
+          box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+        }
+        &:active {
+          transform: translateY(0);
+        }
+      }
     `,
   ],
 })
@@ -134,6 +172,7 @@ export class SidebarRatingComponent implements OnInit {
   rating = signal<number | null>(null);
   hoverRating = signal<number | null>(null);
   alreadyRated = signal<boolean>(false);
+  githubStars = signal<string>('—');
 
   ngOnInit(): void {
     const saved = localStorage.getItem('jast-project-rated');
@@ -141,6 +180,21 @@ export class SidebarRatingComponent implements OnInit {
     if (saved === 'true' && value) {
       this.rating.set(parseInt(value, 10));
       this.alreadyRated.set(true);
+    }
+    this.fetchStars();
+  }
+
+  async fetchStars(): Promise<void> {
+    try {
+      const res = await fetch('https://api.github.com/repos/javier00be/jast');
+      if (res.ok) {
+        const data = await res.json();
+        if (data && typeof data.stargazers_count === 'number') {
+          this.githubStars.set(data.stargazers_count.toString());
+        }
+      }
+    } catch (err) {
+      // Silencio de fallback elegante
     }
   }
 

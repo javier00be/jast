@@ -1,13 +1,13 @@
 change: github-api-integration
 active_store: openspec
-current_phase: specs
-status: specs-completed
-next_recommended: design
+current_phase: archive
+status: archived
+next_recommended: none
 phases:
   proposal: completed
   specs: completed
-  design: pending
-  tasks: pending
-  apply: pending
-  verify: pending
-  archive: pending
+  design: completed
+  tasks: completed
+  apply: completed
+  verify: completed
+  archive: completed
